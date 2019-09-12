@@ -1,0 +1,16 @@
+- name: Create JIRA data directory
+  become: yes
+  file: 
+    path: "{{ jira_data_dir }}"
+    state: directory
+    owner: "{{ jira_user }}"
+    group: "{{ jira_group }}"
+
+- name: Mount JIRA Data Dir on EFS Volume
+  become: yes
+  mount:
+    path: "{{ jira_data_dir }}"
+    src: "{{ jira_data_volume_id }}"
+    fstype: efs
+    opts: tls
+    state: mounted

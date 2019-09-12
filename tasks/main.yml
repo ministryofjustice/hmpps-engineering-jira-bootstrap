@@ -1,3 +1,6 @@
 ---
 # tasks file for jira-bootstrap
+- include: packages.yml
 - include: cwlogs.yml
+- include: services.yml
+- include: jira.yml
