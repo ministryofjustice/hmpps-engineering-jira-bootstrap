@@ -1,0 +1,35 @@
+---
+- name: Update CWLogs Region
+  replace:
+    path: /etc/awslogs/awscli.conf
+    regexp: "us-east-1"
+    replace: "{{ region }}"
+
+- name: Update CWLogs Log Group Target
+  replace:
+    path: /etc/awslogs/awslogs.conf
+    regexp: "log_group_name.=.*"
+    replace: "log_group_name = {{ cwlogs_log_group }}"
+
+- name: Update CWLogs Log Stream Name
+  replace:
+    path: /etc/awslogs/awslogs.conf
+    regexp: "log_stream_name.=.*"
+    replace: "log_stream_name = {{ ansible_facts['hostname'] }}"
+
+- name: Add JIRA Log Files
+  blockinfile:
+    path: /etc/awslogs/awslogs.conf
+    block: |
+      [JIRA Server Log]
+      datetime_format = %b %d %H:%M:%S
+      file = /var/jira/log/atlassian-jira.log
+      log_stream_name = {{ ansible_facts['hostname'] }}
+      initial_position = start_of_file
+      log_group_name = {{ cwlogs_log_group }}
+      [JIRA Server Startup Log]
+      datetime_format = %b %d %H:%M:%S
+      file = {{ jira_user_home_dir }}/{{ jira_filename }}-{{ jira_version }}-standalone/logs/catalina.out
+      log_stream_name = {{ ansible_facts['hostname'] }}
+      initial_position = start_of_file
+      log_group_name = {{ cwlogs_log_group }}
