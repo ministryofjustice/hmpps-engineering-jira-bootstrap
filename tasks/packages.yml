@@ -1,0 +1,5 @@
+- name: Update SSM Agent
+  become: yes
+  yum:
+    name: amazon-ssm-agent
+    state: latest

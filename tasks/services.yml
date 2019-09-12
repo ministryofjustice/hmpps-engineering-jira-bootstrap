@@ -1,0 +1,7 @@
+---
+- name: Enable awslogsd service
+  become: yes
+  systemd:
+    state: started
+    name: awslogsd
+    enabled: yes
