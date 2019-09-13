@@ -13,10 +13,3 @@
     name: jira
     enabled: yes
     daemon_reload: true
-
-- name: Create JIRA systemd service script
-  template: 
-    src: jira.service.j2 
-    dest: /usr/lib/systemd/system/jira.service
-  notify: 
-    - jira-restart

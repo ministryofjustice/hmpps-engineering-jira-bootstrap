@@ -24,7 +24,7 @@
       [JIRA Server Log]
       datetime_format = %b %d %H:%M:%S
       file = /var/jira/log/atlassian-jira.log
-      log_stream_name = "{"{ ansible_facts['hostname'] }}/atlassian-jira-log
+      log_stream_name = "{{ ansible_facts['hostname'] }}/atlassian-jira-log
       initial_position = start_of_file
       log_group_name = {{ cwlogs_log_group }}
       [JIRA Server Startup Log]
