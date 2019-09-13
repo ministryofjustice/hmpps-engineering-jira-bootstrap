@@ -1,10 +1,19 @@
 - name: Create JIRA data directory
   become: yes
-  file: 
+  file:
     path: "{{ jira_data_dir }}"
     state: directory
     owner: "{{ jira_user }}"
     group: "{{ jira_group }}"
+
+- name: Update JIRA data directory permissions
+  become: yes
+  file:
+    path: "{{ jira_data_dir }}"
+    owner: "{{ jira_user }}"
+    group: "{{ jira_group }}"
+    mode: 0755
+    recurse: yes
 
 - name: Mount JIRA Data Dir on EFS Volume
   become: yes
@@ -14,3 +23,18 @@
     fstype: efs
     opts: tls
     state: mounted
+
+- name: Create JIRA Database
+  mysql_db:
+    name: jiradb
+
+- name: Create MySQL JIRA User
+  mysql_user:
+    user: "{{ jira_user }}"
+    password: "{{ jira_admin_password }}"
+    login_host: "{{ jira_db_endpoint }}"
+    login_user: "{{ db_master_user }}"
+    login_password: "{{ db_master_password }}"
+    priv: "{{ jira_db_name }}.*:{{ jira_db_grants }}"
+    update_password: always
+    state: present
