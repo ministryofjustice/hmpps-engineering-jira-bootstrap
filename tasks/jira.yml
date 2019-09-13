@@ -28,6 +28,7 @@
   mysql_user:
     user: "{{ jira_user }}"
     password: "{{ jira_admin_password }}"
+    host_all: "yes"
     login_host: "{{ jira_db_endpoint }}"
     login_user: "{{ db_master_user }}"
     login_password: "{{ db_master_password }}"

@@ -4,6 +4,6 @@
     name: amazon-ssm-agent
     state: latest
 
-- name: Install the Python MySQLB module
+- name: Install the Python MySQL module
   pip: 
     name: MySQL-python
