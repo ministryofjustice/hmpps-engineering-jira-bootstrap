@@ -24,10 +24,6 @@
     opts: tls
     state: mounted
 
-- name: Create JIRA Database
-  mysql_db:
-    name: jiradb
-
 - name: Create MySQL JIRA User
   mysql_user:
     user: "{{ jira_user }}"
