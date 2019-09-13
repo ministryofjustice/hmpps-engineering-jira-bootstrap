@@ -3,6 +3,7 @@
 region: "eu-west-2"
 cwlogs_log_group: "jira-server-cwl"
 jira_user_home_dir: "/home/jira"
+jira_home: "/var/data"
 jira_data_dir: "/var/jira/data"
 jira_filename: "atlassian-jira"
 jira_version: "6.4.9"

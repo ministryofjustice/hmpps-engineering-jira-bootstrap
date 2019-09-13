@@ -28,10 +28,17 @@
   mysql_user:
     user: "{{ jira_user }}"
     password: "{{ jira_admin_password }}"
-    host_all: "yes"
+    host: "%"
     login_host: "{{ jira_db_endpoint }}"
     login_user: "{{ db_master_user }}"
     login_password: "{{ db_master_password }}"
     priv: "{{ jira_db_name }}.*:{{ jira_db_grants }}"
     update_password: always
     state: present
+
+- name: Update dbconfig.xml file
+  template: 
+    src: dbconfig.xml.j2 
+    dest: "{{ jira_home }}/dbconfig.xml"
+    owner: "{{ jira_user }}"
+    group: "{{ jira_group }}"
