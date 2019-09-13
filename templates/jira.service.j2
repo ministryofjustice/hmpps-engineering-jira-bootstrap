@@ -7,8 +7,8 @@ Type=forking
 User={{ jira_user }}
 Group={{ jira_group }}
 Environment=JAVA_HOME={{ java_home }}
-ExecStart={{ jira_user_home_dir }}/jira//bin/start-jira.sh
-ExecStop={{ jira_user_home_dir }}/jira/bin/stop-jira.sh
+ExecStart={{ jira_user_home_dir }}/{{ jira_filename }}-{{ jira_version }}-standalone/bin/start-jira.sh
+ExecStop={{ jira_user_home_dir }}/{{ jira_filename }}-{{ jira_version }}-standalone/bin/stop-jira.sh
    
 [Install]
 WantedBy=multi-user.target
