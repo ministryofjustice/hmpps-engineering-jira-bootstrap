@@ -7,6 +7,7 @@ Type=forking
 User={{ jira_user }}
 Group={{ jira_group }}
 Environment=JAVA_HOME={{ java_home }}
+Environment=JIRA_HOME={{ jira_home }}
 ExecStart={{ jira_user_home_dir }}/{{ jira_filename }}-{{ jira_version }}-standalone/bin/start-jira.sh
 ExecStop={{ jira_user_home_dir }}/{{ jira_filename }}-{{ jira_version }}-standalone/bin/stop-jira.sh
    
