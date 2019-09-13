@@ -12,3 +12,4 @@
     state: started
     name: jira
     enabled: yes
+    daemon_reload: true
