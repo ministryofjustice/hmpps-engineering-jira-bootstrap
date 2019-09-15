@@ -3,7 +3,3 @@
   yum:
     name: amazon-ssm-agent
     state: latest
-
-- name: Install the Python MySQL module
-  pip: 
-    name: MySQL-python

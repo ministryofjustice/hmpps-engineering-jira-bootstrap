@@ -42,8 +42,19 @@
     dest: "{{ jira_home }}/dbconfig.xml"
     owner: "{{ jira_user }}"
     group: "{{ jira_group }}"
+    mode: 0644
+
+- name: Apply JIRA server.xml template
+  template:
+    src: server.xml
+    dest: "{{ jira_user_home_dir }}/{{ jira_filename }}-{{ jira_version }}-standalone/conf/server.xml"
+    owner: "{{ jira_user }}"
+    group: "{{ jira_group }}"
+    mode: 0755
 
 - name: Create JIRA systemd service script
   template: 
     src: jira.service.j2 
     dest: /usr/lib/systemd/system/jira.service
+    mode: 0644
+
