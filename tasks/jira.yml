@@ -37,7 +37,7 @@
     state: present
 
 - name: Update dbconfig.xml file
-  template: 
+  template:
     src: dbconfig.xml.j2
     dest: "{{ jira_home }}/dbconfig.xml"
     owner: "{{ jira_user }}"
@@ -53,8 +53,7 @@
     mode: 0755
 
 - name: Create JIRA systemd service script
-  template: 
-    src: jira.service.j2 
+  template:
+    src: jira.service.j2
     dest: /usr/lib/systemd/system/jira.service
     mode: 0644
-
