@@ -24,6 +24,16 @@
     opts: tls
     state: mounted
 
+- name: Create JIRA DB
+  mysql_db:
+    state: import
+    name: "{{ jira_db_name }}"
+    login_host: "{{ jira_db_endpoint }}"
+    login_user: "{{ db_master_user }}"
+    login_password: "{{ db_master_password }}"
+    collation: utf8_general_ci
+    encoding: utf8
+
 - name: Create MySQL JIRA User
   mysql_user:
     user: "{{ jira_user }}"
