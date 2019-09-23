@@ -31,7 +31,7 @@
     login_host: "{{ jira_db_endpoint }}"
     login_user: "{{ db_master_user }}"
     login_password: "{{ db_master_password }}"
-    collation: utf8_general_ci
+    collation: utf8_bin
     encoding: utf8
 
 - name: Create MySQL JIRA User
