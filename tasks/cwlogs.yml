@@ -33,3 +33,4 @@
       log_stream_name = {{ ansible_facts['hostname'] }}/catalina-out
       initial_position = start_of_file
       log_group_name = {{ cwlogs_log_group }}
+  notify: awslogs-restart

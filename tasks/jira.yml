@@ -26,7 +26,7 @@
 
 - name: Create JIRA DB
   mysql_db:
-    state: import
+    state: present
     name: "{{ jira_db_name }}"
     login_host: "{{ jira_db_endpoint }}"
     login_user: "{{ db_master_user }}"
