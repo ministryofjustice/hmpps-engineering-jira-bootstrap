@@ -5,7 +5,7 @@
   <delegator-name>default</delegator-name>
   <database-type>mysql</database-type>
   <jdbc-datasource>
-    <url>jdbc:mysql://{{ jira_db_endpoint }}:3306/jiradb?useUnicode=true&amp;characterEncoding=UTF8&amp;collation=utf8_general_ci&amp;sessionVariables=storage_engine=InnoDB</url>
+    <url>jdbc:mysql://{{ jira_db_endpoint }}:3306/{{ jira_db_name }}?useUnicode=true&amp;characterEncoding=UTF8&amp;collation=utf8_general_ci&amp;sessionVariables=storage_engine=InnoDB</url>
     <driver-class>com.mysql.jdbc.Driver</driver-class>
     <username>{{ jira_user }}</username>
     <password>{{ jira_admin_password }}</password>
