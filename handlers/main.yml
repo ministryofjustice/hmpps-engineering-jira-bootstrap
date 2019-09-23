@@ -1,7 +1,11 @@
 ---
 # handlers file for jira-bootstrap
 - name: jira-restart
-  service: name=jira state=restarted
+  service: 
+    name: jira 
+    state: restarted
 
 - name: awslogs-restart
-  service: name-awslogsd state=restarted
+  service: 
+    name: awslogsd
+    state: restarted
