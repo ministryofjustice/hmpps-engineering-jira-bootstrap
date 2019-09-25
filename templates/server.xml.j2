@@ -45,7 +45,7 @@
                         type="javax.mail.Session"
                         mail.smtp.host="{{ jira_smtp_endpoint }}"
                         mail.smtp.port="{{ jira_smtp_port }}"
-                        {% if jira_smtp_auth == true %}
+                        {% if jira_smtp_auth == "true" %}
 
                         mail.smtp.auth="{{ jira_smtp_auth }}"
                         mail.smtp.user="{{ jira_smtp_user }}"
