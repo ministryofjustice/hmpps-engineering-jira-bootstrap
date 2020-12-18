@@ -1,24 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Server port="8005" shutdown="SHUTDOWN">
-
-    <!--APR library loader. Documentation at /docs/apr.html -->
+    <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
     <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
-    <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
-    <Listener className="org.apache.catalina.core.JasperListener"/>
+    <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
     <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+    <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
 
-    <!-- Global JNDI resources
-         Documentation at /docs/jndi-resources-howto.html
-    -->
-
-    <!-- A "Service" is a collection of one or more "Connectors" that share
-        a single "Container" Note:  A "Service" is not itself a "Container",
-        so you may not define subcomponents such as "Valves" at this level.
-        Documentation at /docs/config/service.html
-    -->
     <Service name="Catalina">
-
+        <!-- Relaxing chars because of JRASERVER-67974 -->
         <Connector port="8080"
+                relaxedPathChars="[]|"
+                relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
                 maxThreads="150"
                 minSpareThreads="25"
                 connectionTimeout="20000"
@@ -29,9 +21,11 @@
                 redirectPort="8443"
                 acceptCount="100"
                 disableUploadTimeout="true"
+                bindOnInit="false"
+                secure="true"
                 scheme="https"
-		        proxyName="{{ jira_external_endpoint }}"
-	 	        proxyPort="443"/>
+                proxyName="{{ jira_external_endpoint }}"
+                proxyPort="443"/>
 
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
@@ -46,7 +40,7 @@
                         mail.smtp.host="{{ jira_smtp_endpoint }}"
                         mail.smtp.port="{{ jira_smtp_port }}"
                         {% if jira_smtp_auth == "true" %}
-
+                    
                         mail.smtp.auth="{{ jira_smtp_auth }}"
                         mail.smtp.user="{{ jira_smtp_user }}"
                         password="{{ jira_smtp_password }}"
@@ -57,12 +51,13 @@
                         mail.smtp.socketFactory.class="javax.net.ssl.SSLSocketFactory"
                         {% endif %}
                         />
+		            <JarScanner scanManifest="false"/>
+                    <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="120" />
                 </Context>
 
             </Host>
-            <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
+            <Valve className="org.apache.catalina.valves.AccessLogValve"
                    pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"/>
-
         </Engine>
     </Service>
 </Server>
