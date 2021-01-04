@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Server port="8005" shutdown="SHUTDOWN">
+    <!--APR library loader. Documentation at /docs/apr.html -->
+    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
+    <!--Initialize Jasper prior to webapps are loaded. Documentation at /docs/jasper-howto.html -->
+    <Listener className="org.apache.catalina.core.JasperListener"/>
+    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+
+    <Service name="Catalina">
+
+        <Connector port="8080"
+                maxThreads="150"
+                minSpareThreads="25"
+                connectionTimeout="20000"
+                enableLookups="false"
+                maxHttpHeaderSize="8192"
+                protocol="HTTP/1.1"
+                useBodyEncodingForURI="true"
+                redirectPort="8443"
+                acceptCount="100"
+                disableUploadTimeout="true"
+                scheme="https"
+		        proxyName="{{ jira_external_endpoint }}"
+	 	        proxyPort="443"/>
+
+
+
+
+
+        <Engine name="Catalina" defaultHost="localhost">
+            <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
+
+                <Context path="" docBase="${catalina.home}/atlassian-jira" reloadable="false" useHttpOnly="true">
+                    <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
+                              factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
+                    <Manager pathname=""/>
+                    <Resource name="mail/SESSmtpServer"
+                        auth="Container"
+                        type="javax.mail.Session"
+                        mail.smtp.host="{{ jira_smtp_endpoint }}"
+                        mail.smtp.port="{{ jira_smtp_port }}"
+                        {% if jira_smtp_auth == "true" %}
+
+                        mail.smtp.auth="{{ jira_smtp_auth }}"
+                        mail.smtp.user="{{ jira_smtp_user }}"
+                        password="{{ jira_smtp_password }}"
+                        {% endif %}
+                        {% if jira_smtp_starttls %}
+
+                        mail.smtp.starttls.enable="true"
+                        mail.smtp.socketFactory.class="javax.net.ssl.SSLSocketFactory"
+                        {% endif %}
+                        />
+                </Context>
+
+            </Host>
+            <Valve className="org.apache.catalina.valves.AccessLogValve" resolveHosts="false"
+                   pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"/>
+
+        </Engine>
+    </Service>
+</Server>
