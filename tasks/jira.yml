@@ -24,6 +24,16 @@
     opts: tls
     state: mounted
 
+- name: Check for EFS restore from AWS Backup
+  become: yes
+  stat:
+    path: "{{ jira_home }}/aws-backup-restore_*"
+    register: aws_backup
+
+- debug:
+    msg: "It is a directory"
+    when: aws_backup.stat.exists and aws_backup.stat.isdir
+
 - name: Create JIRA DB
   mysql_db:
     state: present
