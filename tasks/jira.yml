@@ -13,7 +13,7 @@
     owner: "{{ jira_user }}"
     group: "{{ jira_group }}"
     mode: 0755
-    recurse: yes
+    #recurse: yes
 
 - name: Mount JIRA Home Dir on EFS Volume
   become: yes
@@ -24,15 +24,29 @@
     opts: tls
     state: mounted
 
-- name: Check for EFS restore from AWS Backup
-  become: yes
-  stat:
-    path: "{{ jira_home }}/aws-backup-restore_*"
-    register: aws_backup
+- name: "Find AWS Backup directory"
+  find:
+    paths: "{{ jira_home }}"
+    recurse: yes
+    file_type: directory
+    use_regex: no
+    patterns: "aws-backup-restore_"
+  register: find_matches
 
-- debug:
-    msg: "It is a directory"
-    when: aws_backup.stat.exists and aws_backup.stat.isdir
+- name: "print the path of our first result"
+  debug:
+    var: find_matches.files[0].path
+  when: find_matches is defined
+
+#- name: Check for EFS restore from AWS Backup
+#  become: yes
+#  stat:
+#    path: "{{ jira_home }}/aws-backup-restore_*"
+#    register: aws_backup
+#
+#- debug:
+#    msg: "It is a directory"
+#    when: aws_backup.stat.exists and aws_backup.stat.isdir
 
 - name: Create JIRA DB
   mysql_db:
