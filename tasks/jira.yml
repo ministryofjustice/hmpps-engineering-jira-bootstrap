@@ -27,10 +27,10 @@
 - name: "Find AWS Backup directory"
   find:
     paths: "{{ jira_home }}"
-    recurse: yes
+    recurse: no
     file_type: directory
     use_regex: no
-    patterns: "aws-backup-restore_"
+    patterns: "aws-backup-restore_*"
   register: find_matches
 
 - name: "print the path of our first result"
