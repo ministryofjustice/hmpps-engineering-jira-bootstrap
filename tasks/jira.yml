@@ -38,6 +38,16 @@
     var: find_matches.files[0].path
   when: find_matches is defined
 
+- name: "print the path of our first result"
+  set_fact: aws_backup="{{ find_matches.files[0].path }}"
+  when: find_matches is defined
+
+- name: Move back up to JIRA_HOME
+  command: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/"
+  args:
+    chdir: "{{ jira_home }}"
+  when: find_matches is defined
+
 #- name: Check for EFS restore from AWS Backup
 #  become: yes
 #  stat:
