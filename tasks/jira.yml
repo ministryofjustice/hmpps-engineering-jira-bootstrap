@@ -62,7 +62,7 @@
 
 - name: Move back up to JIRA_HOME
   become: yes
-  command: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/test/"
+  shell: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/test/"
   args:
     chdir: "{{ jira_home }}"
   when: find_matches is defined
