@@ -2,14 +2,14 @@
 - name: Enable and Start awslogsd service
   become: yes
   systemd:
-    state: stopped #started
+    state: started
     name: awslogsd
     enabled: yes
 
 - name: Enable and Start jira service
   become: yes
   systemd:
-    state: stopped #started
+    state: started
     name: jira
     enabled: yes
     daemon_reload: true
