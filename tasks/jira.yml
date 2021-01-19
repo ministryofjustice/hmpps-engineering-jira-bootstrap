@@ -24,6 +24,24 @@
     opts: tls
     state: mounted
 
+### testing
+- name: Create test mv directory
+  become: yes
+  file:
+    path: "{{ jira_home }}/test"
+    state: directory
+    owner: "{{ jira_user }}"
+    group: "{{ jira_group }}"
+
+- name: Update test directory permissions
+  become: yes
+  file:
+    path: "{{ jira_home }}/test"
+    owner: "{{ jira_user }}"
+    group: "{{ jira_group }}"
+    mode: 0755
+    #recurse: yes
+
 - name: "Find AWS Backup directory"
   find:
     paths: "{{ jira_home }}"
@@ -43,7 +61,7 @@
   when: find_matches is defined
 
 - name: Move back up to JIRA_HOME
-  command: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/"
+  command: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/test/"
   args:
     chdir: "{{ jira_home }}"
   when: find_matches is defined
