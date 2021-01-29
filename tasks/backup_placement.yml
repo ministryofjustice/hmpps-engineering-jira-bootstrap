@@ -27,14 +27,14 @@
         chdir: "{{ jira_home }}"
   when: aws_bkup_dir.matched > 0
 
-#- name: ensure file exists to test next step
-#  copy:
-#    content: ""
-#    dest: "{{ aws_backup }}/stopfile"
-#    force: no
-#    owner: "{{ jira_user }}"
-#    group: "{{ jira_group }}"
-#    mode: 0755
+- name: ensure file exists to test next step
+  copy:
+    content: ""
+    dest: "{{ aws_backup }}/stopfile"
+    force: no
+    owner: "{{ jira_user }}"
+    group: "{{ jira_group }}"
+    mode: 0755
 
 - name: Remove AWS Backup directory
   block:
