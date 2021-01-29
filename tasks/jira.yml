@@ -42,12 +42,18 @@
   set_fact: aws_backup="{{ find_matches.files[0].path }}"
   when: find_matches is defined
 
+- name: "check for dbconfig.xml in backup directory"
+  stat:
+    path: "{{ aws_backup }}/dbconfig.xml"
+  register: test_file
+  when: find_matches is defined
+
 - name: Move back up to JIRA_HOME
   become: yes
   shell: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/"
   args:
     chdir: "{{ jira_home }}"
-  when: find_matches is defined
+  when: find_matches is defined and test_file is defined and test_file.stat.exists
 
 - name: Create JIRA DB
   mysql_db:
