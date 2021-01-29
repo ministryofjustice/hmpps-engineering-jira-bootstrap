@@ -28,6 +28,7 @@
 # Moves files into place
 # Remove AWS Backup directory
 - include: backup_placement.yml
+  when: restore_from_backup
 
 - name: Create JIRA DB
   mysql_db:

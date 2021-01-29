@@ -12,3 +12,4 @@ jira_smtp_auth: "true"
 jira_external_endpoint: "jira.engineering-dev.probation.hmpps.dsd.io"
 java_home: "/usr/java/default"
 mysql_connector_version: "5.1.48"
+restore_from_backup: false
