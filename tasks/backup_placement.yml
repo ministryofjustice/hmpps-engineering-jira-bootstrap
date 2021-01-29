@@ -28,11 +28,18 @@
         - dbconfig.xml
         - .jira-home.lock
 
+    - name: Check if AWS Backup directory is empty before proceeding
+      find:
+        paths: "{{ aws_backup }}/"
+        hidden: true
+      register: files_found
+
     - name: Move back up to JIRA_HOME
       become: yes
       shell: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/"
       args:
         chdir: "{{ jira_home }}"
+      when: files_found.matched > 0
   when: aws_bkup_dir.matched > 0
 
 - name: Remove AWS Backup directory
