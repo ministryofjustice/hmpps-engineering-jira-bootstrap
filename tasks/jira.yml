@@ -88,9 +88,9 @@
   when: find_matches is defined and filesFound.matched == 0
 
 - name: Remove AWS Backup directory
-    file:
-      path: "{{ aws_backup }}"
-      state: absent
+  file:
+    path: "{{ aws_backup }}"
+    state: absent
   when: find_matches is defined and filesFound.matched == 0
 
 - name: Create JIRA DB
