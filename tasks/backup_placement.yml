@@ -45,6 +45,7 @@
 - name: Check if AWS Backup directory is empty before proceeding
   find:
     paths: "{{ aws_backup }}/"
+    hidden: true
   register: files_found
   when: aws_bkup_dir is defined
 
