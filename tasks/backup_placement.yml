@@ -1,7 +1,7 @@
 # Check EFS for AWS Backup directory
 # Moves files into place
 # Remove AWS Backup directory
--
+
 - name: "Find AWS Backup directory"
   find:
     paths: "{{ jira_home }}"
@@ -11,27 +11,21 @@
     patterns: "aws-backup-restore_*"
   register: aws_bkup_dir
 
-- name: "Print the path of first result (only)"
-  debug:
-    var: aws_bkup_dir.files[0].path
-  when: aws_bkup_dir.matched > 0
+- name: Move files in back up to JIRA_HOME
+  block:
+    - name: "Print the path of first result (only)"
+      debug:
+        var: aws_bkup_dir.files[0].path
 
-- name: "Set path to AWS Backup directory"
-  set_fact: aws_backup="{{ aws_bkup_dir.files[0].path }}"
-  when: aws_bkup_dir.matched > 0
+    - name: "Set path to AWS Backup directory"
+      set_fact: aws_backup="{{ aws_bkup_dir.files[0].path }}"
 
-- name: "Check for dbconfig.xml in AWS Backup directory"
-  stat:
-    path: "{{ aws_backup }}/dbconfig.xml"
-  register: dbconfig_file
+    - name: Move back up to JIRA_HOME
+      become: yes
+      shell: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/"
+      args:
+        chdir: "{{ jira_home }}"
   when: aws_bkup_dir.matched > 0 and aws_bkup is defined
-
-- name: Move back up to JIRA_HOME
-  become: yes
-  shell: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/"
-  args:
-    chdir: "{{ jira_home }}"
-  when: dbconfig_file is defined and dbconfig_file.stat.exists
 
 #- name: ensure file exists to test next step
 #  copy:
@@ -42,28 +36,29 @@
 #    group: "{{ jira_group }}"
 #    mode: 0755
 
-- name: Check if AWS Backup directory is empty before proceeding
-  find:
-    paths: "{{ aws_backup }}/"
-    hidden: true
-  register: files_found
-  when: aws_bkup_dir is defined
+- name: Remove AWS Backup directory
+  block:
+    - name: Check if AWS Backup directory is empty before proceeding
+      find:
+        paths: "{{ aws_backup }}/"
+        hidden: true
+      register: files_found
 
-- name: Display details of files in AWS Backup directory
-  debug:
-    var: files_found
-  when: aws_bkup_dir is defined
+    - name: Display details of files in AWS Backup directory
+      debug:
+        var: files_found
 
-- debug:
-    msg: 'The AWS Backup directory "{{ aws_backup }}" not empty.'
-  when: files_found.matched > 0
+    - debug:
+        msg: 'The AWS Backup directory "{{ aws_backup }}" not empty.'
+      when: files_found.matched > 0
 
-- debug:
-    msg: 'The AWS Backup directory "{{ aws_backup }}"  is empty. Proceeding.'
-  when: aws_bkup_dir is defined and files_found.matched == 0
+    - debug:
+        msg: 'The AWS Backup directory "{{ aws_backup }}"  is empty. Proceeding.'
+      when: files_found.matched == 0
 
-- name: Remove empty AWS Backup directory
-  file:
-    path: "{{ aws_backup }}"
-    state: absent
-  when: aws_bkup_dir is defined and files_found.matched == 0
+    - name: Remove empty AWS Backup directory
+      file:
+        path: "{{ aws_backup }}"
+        state: absent
+      when: files_found.matched == 0
+  when: aws_backup is defined
