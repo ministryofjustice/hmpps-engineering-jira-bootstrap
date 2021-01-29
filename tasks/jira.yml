@@ -48,6 +48,11 @@
   register: test_file
   when: find_matches is defined
 
+- name: "print the path of our first result"
+  debug:
+    var: test_file
+  when: find_matches is defined
+
 - name: Move back up to JIRA_HOME
   become: yes
   shell: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/"
