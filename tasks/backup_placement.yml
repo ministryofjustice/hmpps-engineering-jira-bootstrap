@@ -24,14 +24,14 @@
   stat:
     path: "{{ aws_backup }}/dbconfig.xml"
   register: dbconfig_file
-  when: aws_bkup_dir is defined
+  when: aws_bkup_dir.matched > 0 and aws_bkup is defined
 
 - name: Move back up to JIRA_HOME
   become: yes
   shell: "/usr/bin/mv --no-clobber {{ aws_backup }}/* {{ jira_home }}/"
   args:
     chdir: "{{ jira_home }}"
-  when: aws_bkup_dir is defined and dbconfig_file is defined and dbconfig_file.stat.exists
+  when: dbconfig_file is defined and dbconfig_file.stat.exists
 
 #- name: ensure file exists to test next step
 #  copy:
