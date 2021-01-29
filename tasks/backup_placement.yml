@@ -49,7 +49,8 @@
   register: files_found
   when: aws_bkup_dir is defined
 
-- debug:
+- name: Display details of files in AWS Backup directory
+  debug:
     var: files_found
   when: aws_bkup_dir is defined
 
@@ -61,7 +62,7 @@
     msg: 'The AWS Backup directory "{{ aws_backup }}"  is empty. Proceeding.'
   when: aws_bkup_dir is defined and files_found.matched == 0
 
-- name: Remove AWS Backup directory
+- name: Remove empty AWS Backup directory
   file:
     path: "{{ aws_backup }}"
     state: absent
