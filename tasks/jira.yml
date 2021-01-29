@@ -60,6 +60,21 @@
     chdir: "{{ jira_home }}"
   when: find_matches is defined and test_file is defined and test_file.stat.exists
 
+- name: Check if Backup directory is empty before proceeding
+  find:
+    paths: "{{ aws_backup }}/"
+  register: filesFound
+
+- debug:
+    var: filesFound
+
+- debug:
+    msg: 'The AWS Backup directory "{{ aws_backup }}" not empty.'
+  when: filesFound.matched > 0
+
+- debug:
+    msg: 'The AWS Backup directory "{{ aws_backup }}"  is empty. Proceeding.'
+
 - name: Create JIRA DB
   mysql_db:
     state: present
