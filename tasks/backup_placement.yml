@@ -18,7 +18,7 @@
 
 - name: "Set path to AWS Backup directory"
   set_fact: aws_backup="{{ aws_bkup_dir.files[0].path }}"
-  when: aws_bkup_dir is defined
+  when: aws_bkup_dir.matched > 0
 
 - name: "Check for dbconfig.xml in AWS Backup directory"
   stat:
