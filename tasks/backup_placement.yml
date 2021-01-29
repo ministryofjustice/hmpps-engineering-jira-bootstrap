@@ -14,7 +14,7 @@
 - name: "Print the path of first result (only)"
   debug:
     var: aws_bkup_dir.files[0].path
-  when: aws_bkup_dir.files is defined
+  when: aws_bkup_dir.matched > 0
 
 - name: "Set path to AWS Backup directory"
   set_fact: aws_backup="{{ aws_bkup_dir.files[0].path }}"
