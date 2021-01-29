@@ -21,12 +21,12 @@
       set_fact: aws_backup="{{ aws_bkup_dir.files[0].path }}"
 
     - name: Remove unrequired files from backup
-        file:
-          path: "{{ aws_backup }}/{{ item }}"
-          state: absent
-        loop:
-          - dbconfig.xml
-          - .jira-home.lock
+      file:
+        path: "{{ aws_backup }}/{{ item }}"
+        state: absent
+      loop:
+        - dbconfig.xml
+        - .jira-home.lock
 
     - name: Move back up to JIRA_HOME
       become: yes
