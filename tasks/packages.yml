@@ -3,3 +3,11 @@
   yum:
     name: amazon-ssm-agent
     state: latest
+
+- name: Install additional packages
+  become: yes
+  yum:
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - tree
