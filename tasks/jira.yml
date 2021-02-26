@@ -73,3 +73,14 @@
     src: jira.service.j2
     dest: /usr/lib/systemd/system/jira.service
     mode: 0644
+
+- name: Update checkjava script with version from later Jira for OpenJDK compatibility
+  become: yes
+  copy:
+    src: "{{ role_path}}/files/check-java.sh"
+    dest: "{{ jira_user_home_dir }}/{{ jira_filename }}-{{ jira_version }}-standalone/bin/check-java.sh"
+    owner: "{{ jira_user }}"
+    group: "{{ jira_group }}"
+    mode: 0755
+    backup: yes
+  when: jira_version | float >= 7 and jira_version | float < 8
