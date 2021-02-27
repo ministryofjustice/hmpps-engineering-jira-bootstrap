@@ -91,4 +91,4 @@
     group: "{{ jira_group }}"
     mode: 0755
     backup: yes
-  when: jira_version | float >= 7 and jira_version | float < 8
+  when: jira_version == "7.0.11"
