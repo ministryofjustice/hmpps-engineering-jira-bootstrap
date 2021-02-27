@@ -74,6 +74,14 @@
     dest: /usr/lib/systemd/system/jira.service
     mode: 0644
 
+- name: jira_version
+  debug:
+    var: jira_version
+
+- name: jira_version float
+  debug:
+    var: "{{ jira_version | float }}"
+
 - name: Update checkjava script with version from later Jira for OpenJDK compatibility
   become: yes
   copy:
