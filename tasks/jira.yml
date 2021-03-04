@@ -13,7 +13,7 @@
     owner: "{{ jira_user }}"
     group: "{{ jira_group }}"
     mode: 0755
-    #recurse: yes
+    recurse: yes
 
 - name: Mount JIRA Home Dir on EFS Volume
   become: yes
