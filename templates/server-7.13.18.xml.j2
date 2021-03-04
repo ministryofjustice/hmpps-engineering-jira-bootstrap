@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Server port="8005" shutdown="SHUTDOWN">
-    <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
-    <!-- Security listener. Documentation at /docs/config/listeners.html
-    <Listener className="org.apache.catalina.security.SecurityListener" />
-    -->
-    <!--APR library loader. Documentation at /docs/apr.html -->
-    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on" />
-    <!-- Prevent memory leaks due to use of particular java/javax APIs-->
-    <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener" />
-    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener" />
-    <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener" />
+    <Listener className="org.apache.catalina.startup.VersionLoggerListener"/>
+    <Listener className="org.apache.catalina.core.AprLifecycleListener" SSLEngine="on"/>
+    <Listener className="org.apache.catalina.core.JreMemoryLeakPreventionListener"/>
+    <Listener className="org.apache.catalina.mbeans.GlobalResourcesLifecycleListener"/>
+    <Listener className="org.apache.catalina.core.ThreadLocalLeakPreventionListener"/>
 
     <Service name="Catalina">
-
-        <Connector port="8080"
-                   maxThreads="150"
-                   minSpareThreads="25"
-                   connectionTimeout="20000"
-                   enableLookups="false"
-                   maxHttpHeaderSize="8192"
-                   protocol="HTTP/1.1"
-                   useBodyEncodingForURI="true"
-                   redirectPort="8443"
-                   acceptCount="100"
-                   disableUploadTimeout="true"
-                   scheme="https"
-                   proxyName="{{ jira_external_endpoint }}"
-                   proxyPort="443"/>
+        <Connector
+            port="8080"
+            relaxedPathChars="[]|"
+            relaxedQueryChars="[]|{}^&#x5c;&#x60;&quot;&lt;&gt;"
+            maxThreads="150"
+            minSpareThreads="25"
+            connectionTimeout="20000"
+            enableLookups="false"
+            maxHttpHeaderSize="8192"
+            protocol="HTTP/1.1"
+            useBodyEncodingForURI="true"
+            redirectPort="8443"
+            acceptCount="100"
+            disableUploadTimeout="true"
+            bindOnInit="false"
+            secure="true"
+            scheme="https"
+            proxyName="{{ jira_external_endpoint }}"
+            proxyPort="443"
+        />
 
         <Engine name="Catalina" defaultHost="localhost">
             <Host name="localhost" appBase="webapps" unpackWARs="true" autoDeploy="true">
@@ -35,6 +35,8 @@
                     <Resource name="UserTransaction" auth="Container" type="javax.transaction.UserTransaction"
                               factory="org.objectweb.jotm.UserTransactionFactory" jotm.timeout="60"/>
                     <Manager pathname=""/>
+                    <JarScanner scanManifest="false"/>
+                    <Valve className="org.apache.catalina.valves.StuckThreadDetectionValve" threshold="120" />
                     <Resource name="mail/SESSmtpServer"
                               auth="Container"
                               type="javax.mail.Session"
@@ -57,7 +59,6 @@
             </Host>
             <Valve className="org.apache.catalina.valves.AccessLogValve"
                    pattern="%a %{jira.request.id}r %{jira.request.username}r %t &quot;%m %U%q %H&quot; %s %b %D &quot;%{Referer}i&quot; &quot;%{User-Agent}i&quot; &quot;%{jira.request.assession.id}r&quot;"/>
-
         </Engine>
     </Service>
 </Server>
